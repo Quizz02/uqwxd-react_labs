@@ -25,7 +25,7 @@ const App = () => {
     }
 
     // Add the deleteToDo code here
-    function deleteTodo(id){
+    function deleteTodo(id) {
         let updatedTodos = [...todos].filter((todo) => todo.id !== id);
         setTodos(updatedTodos);
     }
@@ -33,7 +33,7 @@ const App = () => {
     // Add the toggleComplete code here
     function toggleComplete(id) {
         let updatedTodos = [...todos].map((todo) => {
-            if(todo.id === id) {
+            if (todo.id === id) {
                 todo.completed = !todo.completed;
             }
             return todo
@@ -42,7 +42,7 @@ const App = () => {
     }
 
     // Add the submitEdits code here
-    function submitEdits(newtodo){
+    function submitEdits(newtodo) {
         const updatedTodos = [...todos].map((todo) => {
             if (todo.id === newtodo.id) {
                 todo.text = document.getElementById(newtodo.id).value;
@@ -65,8 +65,22 @@ const App = () => {
             </form>
             {todos.map((todo) =>
                 <div className="todo" key={todo.id}>
-                    <div className="todo-text">{todo.text}<input type="checkbox" id="completed" checked={todo.completed} onChange={() => toggleComplete(todo.id)}></input></div>
-                    <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+                    <div className="todo-text">
+                        <input type="checkbox" id="completed" checked={todo.completed} onChange={() => toggleComplete(todo.id)} />
+                        { /*si se esta editando, mostrar un input, de lo contrario, mostrar el texto*/
+                            todo.id === todoEditing ?
+                                (<input type="text" id={todo.id} defaultValue={todo.text} />) :
+                                (<div>{todo.text}</div>)
+                        }
+                    </div>
+                    <div className="todo-actions">
+                        {
+                            todo.id === todoEditing ?
+                                (<button onClick={() => submitEdits(todo)}>Enviar edit</button>) :
+                                (<button onClick={() => setTodoEditing(todo.id)}>Editar</button>)
+                        }
+                        <button onClick={() => deleteTodo(todo.id)}>Borrar</button>
+                    </div>
                 </div>)}
         </div>
     );
